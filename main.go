@@ -132,6 +132,13 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleGenerate(w http.ResponseWriter, r *http.Request) {
+	// If a different region is specified, redirect to that region.
+	if region := r.URL.Query().Get("region"); region != "" && region != os.Getenv("FLY_REGION") {
+		log.Printf("redirecting from %q to %q", os.Getenv("FLY_REGION"), region)
+		w.Header().Set("fly-replay", "region="+region)
+		return
+	}
+
 	// Only allow POST methods.
 	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
