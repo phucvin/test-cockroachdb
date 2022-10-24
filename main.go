@@ -145,7 +145,7 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 		Company: gofakeit.Company(),
 	}
 	start := time.Now()
-	if _, err := db.ExecContext(r.Context(), `INSERT INTO persons (name, phone, company) VALUES ($1, $2, )`, person.Name, person.Phone, person.Company); err != nil {
+	if _, err := db.ExecContext(r.Context(), `INSERT INTO persons (name, phone, company) VALUES ($1, $2, $3)`, person.Name, person.Phone, person.Company); err != nil {
 		log.Printf("error inserting person: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
